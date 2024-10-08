@@ -34,7 +34,7 @@ class PointHurricane(db.Model):
         return f'Lat: {self.lat}, Lon: {self.lon}, Day: {self.day}, Month: {self.month}'
 
 # Route to display data (Polygons)
-@app.route('/show_polygons/hh=<string:hh>', methods=['GET'])
+@app.route('/hh=<string:hh>', methods=['GET'])
 def show_polygons(hh):
     # Query to get polygon geometries from the database and transform them to GeoJSON format
     name_list = [name for name in hh.split('&')]
