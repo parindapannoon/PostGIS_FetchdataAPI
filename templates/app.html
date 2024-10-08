@@ -25,9 +25,9 @@
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script>
         // Initialize the map and set its view to a default location
-        var map = L.map('map').setView([19.001795, -77.235050], 5); // Center of the map
+        var map = L.map('map').setView([19.001795, -77.235050], 5);
 
-        // Add the OpenStreetMap tiles
+        // Add the basemap tiles
         L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.{ext}', {
 	minZoom: 0,
 	maxZoom: 20,
@@ -40,11 +40,11 @@
 
         // Define the style for polygons
         var polygonStyle = {
-            color: '#e5f18f',  // Pink border color
-            weight: 1.5,  // Thin border
-            opacity: 0.5,  // 50% border opacity
-            fillColor: '#feb771',  // Pink fill color
-            fillOpacity: 0.3  // 20% fill opacity
+            color: '#e5f18f', 
+            weight: 1.5, 
+            opacity: 0.5,  
+            fillColor: '#feb771', 
+            fillOpacity: 0.3 
         };
 
         // Add polygons to the map for each GeoJSON object
@@ -58,17 +58,15 @@
         });
 
 // Points data passed from the Flask backend
-
         var points = {{ points|tojson }};
 // Style options for the circle markers
        var greenIcon = L.icon({
     iconUrl: 'https://images-ext-1.discordapp.net/external/l0Y7ZEmPmoMuoaNxFuwC-ypYwzoBhdLNHQxYHY2G-D0/https/cdn-icons-png.freepik.com/512/5401/5401775.png?format=webp&quality=lossless&width=16&height=16',
-
     iconAnchor:   [7, 6], // point of the icon which will correspond to marker's location
 
 });
 
-       // Add markers to the map for each point with day and month label
+       // Add popups
         points.forEach(function(point) {
         var marker = L.marker([point.lat, point.lon], { icon: greenIcon }).addTo(map)
         .bindPopup('Latitude: ' + point.lat + '<br>Longitude: ' + point.lon + '<br>Day: ' + point.day + '<br>Month: ' + point.month);
