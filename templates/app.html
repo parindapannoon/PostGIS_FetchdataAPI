@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Map Visualization</title>
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+        /* Set the size of the map */
+        #map {
+            height: 650px;
+            width: 65%;
+        }
+    </style>
+</head>
+<body style="background-color: #222222; border:10px solid Tomato;";>
+    <h1 style="color:white; font-family:Calibri; line-height:3PX; text-align: center;">Hurricane Data Visualization</h1>
+    <h2 style="color:white; font-family:Calibri; line-height: 8PX; text-align: center;">Hurricane IAN 2022, NOAA</h2>
+    <!-- Embed flourish data visualization -->
+    <div id="map"></div>
+    <div style = 'width:400px; height: 0px; position: absolute; right: 20px; top: 460px' class="flourish-embed flourish-table" data-src="visualisation/19391834"><script src="https://public.flourish.studio/resources/embed.js"></script><noscript><img src="https://public.flourish.studio/visualisation/19391834/thumbnail" width="10%" alt="table visualization" /></noscript></div>
+    <div style = 'width:400px; height: 10px; position: absolute; right: 20px; top: 50px' class="flourish-embed flourish-chart" data-src="visualisation/19391322"><script src="https://public.flourish.studio/resources/embed.js"></script><noscript><img src="https://public.flourish.studio/visualisation/19391322/thumbnail" width="100%", height="100%" alt="chart visualization" /></noscript></div>
+    <!-- Leaflet JavaScript -->
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        // Initialize the map and set its view to a default location
+        var map = L.map('map').setView([19.001795, -77.235050], 5); // Center of the map
+
+        // Add the OpenStreetMap tiles
+        L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.{ext}', {
+	minZoom: 0,
+	maxZoom: 20,
+	attribution: '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+	ext: 'png'
+}).addTo(map);
+
+        // GeoJSON data for polygons passed from the Flask backend
+        var polygons = {{ polygons|tojson }};
+
+        // Define the style for polygons
+        var polygonStyle = {
+            color: '#e5f18f',  // Pink border color
+            weight: 1.5,  // Thin border
+            opacity: 0.5,  // 50% border opacity
+            fillColor: '#feb771',  // Pink fill color
+            fillOpacity: 0.3  // 20% fill opacity
+        };
+
+        // Add polygons to the map for each GeoJSON object
+        polygons.forEach(function(geojson) {
+            var polygon = JSON.parse(geojson); // Convert string to GeoJSON object
+            L.geoJSON(polygon, {  // Apply style to the polygons
+                style: polygonStyle
+            }).addTo(map)
+                .bindPopup('Polygon Area')
+                .openPopup();
+        });
+
+// Points data passed from the Flask backend
+
+        var points = {{ points|tojson }};
+// Style options for the circle markers
+       var greenIcon = L.icon({
+    iconUrl: 'https://images-ext-1.discordapp.net/external/l0Y7ZEmPmoMuoaNxFuwC-ypYwzoBhdLNHQxYHY2G-D0/https/cdn-icons-png.freepik.com/512/5401/5401775.png?format=webp&quality=lossless&width=16&height=16',
+
+    iconAnchor:   [7, 6], // point of the icon which will correspond to marker's location
+
+});
+
+       // Add markers to the map for each point with day and month label
+        points.forEach(function(point) {
+        var marker = L.marker([point.lat, point.lon], { icon: greenIcon }).addTo(map)
+        .bindPopup('Latitude: ' + point.lat + '<br>Longitude: ' + point.lon + '<br>Day: ' + point.day + '<br>Month: ' + point.month);
+        marker.openPopup();
+});
+
+
+    </script>
+</body>
+</html>
