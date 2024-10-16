@@ -52,7 +52,9 @@ NHC GIS Archive - Tropical Cyclone Best Track, NOAA
 
 https://www.nhc.noaa.gov/gis/archive_besttrack_results.php?id=al09&year=2022&name=Hurricane%20IAN
 
-![Screenshot (2482)](https://github.com/user-attachments/assets/09febfdc-2210-4510-9d2e-9cfdb227e1ff)
+
+https://github.com/user-attachments/assets/d94a1629-743e-4a46-830b-a26f09cc1024
+
 
 ![Screenshot (2483)](https://github.com/user-attachments/assets/3a4d711f-ac15-42a5-9bc0-024d976e4fc0)
 
